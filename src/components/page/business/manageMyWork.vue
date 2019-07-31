@@ -58,7 +58,11 @@
                     <tr><td><div class="cell">篇名：{{tableData.gz_title}}</div></td></tr>
                     <tr>
                       <td>
-                      <div class="cell">长度：{{tableData.gz_size[0]}}小时{{tableData.gz_size[1]}}分钟{{tableData.gz_size[2]}}秒   <el-button style="float: right" plain size="mini" type="primary"  @click="lenVisible=true">查看其他广告</el-button></div>
+                      <div class="cell">
+                        长度：{{tableData.gz_size[0]}}小时{{tableData.gz_size[1]}}分钟{{tableData.gz_size[2]}}秒
+                        &nbsp;&nbsp;&nbsp;&nbsp;<spn v-if="bz_time.length>0">其他版本长度：</spn><span style="display: inline-block" v-for="item in bz_time">{{item.h}}小时{{item.m}}分钟{{item.s}}秒</span>
+                        <div style="text-align: right"><el-button  plain size="mini" type="primary"  @click="lenVisible=true">添加</el-button></div>
+                      </div>
 
                       </td>
                     </tr>
@@ -593,6 +597,7 @@
         $_post('/Views/admin/business/updateWork.aspx',save2).then(function (response) {
           if(response.code==1){
             _this.$message.success('添加成功');
+            _this.lenVisible=false;
           }else {
             _this.$message.error(response.msg);
           }
