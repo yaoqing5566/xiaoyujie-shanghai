@@ -60,7 +60,7 @@
                       <td>
                       <div class="cell">
                         长度：{{tableData.gz_size[0]}}小时{{tableData.gz_size[1]}}分钟{{tableData.gz_size[2]}}秒
-                        &nbsp;&nbsp;&nbsp;&nbsp;<spn v-if="bz_time.length>0">其他版本长度：</spn><span style="display: inline-block" v-for="item in bz_time">{{item.h}}小时{{item.m}}分钟{{item.s}}秒</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<spn v-if="bz_time.length>0">其他版本长度：</spn><span style="display: inline-block" v-for="(item,i) in bz_time">{{item.h}}小时{{item.m}}分钟{{item.s}}秒<span v-if="i!=bz_time.length-1">、</span></span>
                         <div style="text-align: right"><el-button  plain size="mini" type="primary"  @click="lenVisible=true">添加</el-button></div>
                       </div>
 
