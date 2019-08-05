@@ -158,7 +158,7 @@
       }
     },
     created() {
-      this.$store.commit('superCanSee'); //
+      this.$store.commit('adminCanSee'); //
       this.workNumber=localStorage.getItem('workIntentionName');
       console.log(this.workNumber)
       this.workId = this.$route.query.id;

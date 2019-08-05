@@ -119,7 +119,7 @@
               {
                 index: '2-6',
                 title: '工作单管理',
-                show:this.$store.state.userInfo.type==1,
+                show:true,
                 subs: [
                   {
                     index: 'workLog',
@@ -128,7 +128,7 @@
                   },
                   {
                     index: 'workIntention',
-                    show:this.$store.state.userInfo.type==1,
+                    show:this.$store.state.userInfo.type==1||this.$store.state.userInfo.type==2,
                     title: '工作单意向'
                   }
                   // {
