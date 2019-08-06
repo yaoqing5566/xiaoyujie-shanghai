@@ -314,7 +314,7 @@
         this.getData();
       },
       formatDate(row, column) {
-        return moment(row.date).format("YYYY-MM-DD");
+        return moment(row.creat_time).format("YYYY-MM-DD");
       },
       handleCurrentChange(val) {
         this.pageIndex = val;
