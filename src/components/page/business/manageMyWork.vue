@@ -136,13 +136,13 @@
 
 
                     <!--奖金分配-->
-                    <tbody v-if="tableData.state>0&&$store.state.userInfo.type==1">
+                    <tbody>
                     <tr>
                       <td style="background: #fafafa;">
                         <div class="cell">
                           <strong>工作内容</strong>
                           <div style="float: right">
-                            <el-button plain size="mini" type="success"   @click="bonus">奖金分配</el-button>
+                            <el-button plain size="mini" type="success"  v-if="tableData.state>0&&$store.state.userInfo.type==1"  @click="bonus">奖金分配</el-button>
                           </div>
                         </div>
                       </td>
@@ -187,29 +187,45 @@
                           </div>
 
                           <div>
-                            <!--<div class="el-table el-table&#45;&#45;fit el-table&#45;&#45;border el-table&#45;&#45;scrollable-x el-table&#45;&#45;enable-row-hover el-table&#45;&#45;enable-row-transition el-table&#45;&#45;small" style="width:100%;">-->
-                            <!--<div class="el-table__body-wrapper is-scrolling-left">-->
-                            <!--<table cellspacing="0" cellpadding="0" border="0" class="el-table__body" width="100%" style="table-layout: inherit">-->
-                            <!--<tbody v-for="item in tableData.work_nature">-->
-                            <!--<tr>-->
-                            <!--<th colspan="3">-->
-                            <!--<div class="cell">-->
-                            <!--{{config.workNature[item]}}-->
-                            <!--<el-button plain size="mini" type="warning" @click="designatedWorkerAdd(item)" style="padding: 5px 6px;  margin-left: 30px">指派工作人员</el-button>-->
-                            <!--</div>-->
-                            <!--</th>-->
-                            <!--</tr>-->
-                            <!--<tr v-for="itemTaff in assignsTaff" v-if="item==itemTaff.taff_work_nature">-->
-                            <!--<td width="80"><div class="cell">{{itemTaff.supplier_name}}</div></td>-->
-                            <!--<td><div class="cell">{{itemTaff.taff_remarks}}</div></td>-->
-                            <!--<td width="80"><div class="cell" style="text-align: center">-->
-                            <!--<el-button plain size="mini" type="danger" @click="handleDelete(-1,itemTaff)">删除</el-button>-->
-                            <!--</div></td>-->
-                            <!--</tr>-->
-                            <!--</tbody>-->
-                            <!--</table>-->
-                            <!--</div>-->
-                            <!--</div>-->
+                            <div
+                              class="el-table el-table--fit el-table--border el-table--scrollable-x el-table--enable-row-hover el-table--enable-row-transition el-table--small"
+                              style="width:100%;">
+                              <div class="el-table__body-wrapper is-scrolling-left">
+                                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" width="100%"
+                                       style="table-layout: inherit">
+                                  <tbody v-for="item in tableData.work_nature">
+                                  <tr>
+                                    <th colspan="3">
+                                      <div class="cell">
+                                        {{config.workNature[item]}}
+                                        <el-button plain size="mini" type="warning" @click="designatedWorkerAdd(item)"
+                                                   style="padding: 5px 6px;  margin-left: 30px">添加工作人员
+                                        </el-button>
+                                      </div>
+                                    </th>
+                                  </tr>
+                                  <tr v-for="itemTaff in assignsTaff" v-if="item==itemTaff.taff_work_nature">
+                                    <td width="80">
+                                      <div class="cell">{{itemTaff.supplier_name}}</div>
+                                    </td>
+                                    <td>
+                                      <div class="cell">{{itemTaff.taff_remarks}}</div>
+                                    </td>
+                                    <td width="160">
+                                      <div class="cell" style="text-align: center">
+                                        <el-button plain size="mini" type="primary" @click="editAssignsTaff(-1,itemTaff)">
+                                          修改
+                                        </el-button>
+                                        <el-button plain size="mini" type="danger" @click="handleDelete(-1,itemTaff)">
+                                          删除
+                                        </el-button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -383,12 +399,12 @@
 
 
     <!-- 指派工作人员 -->
-    <el-dialog :close-on-click-modal="false" title="指派工作人员" :visible.sync="designatedVisible" width="450px">
+    <el-dialog :close-on-click-modal="false" title="工作人员" :visible.sync="designatedVisible" width="450px">
       <el-form  label-width="80px">
         <el-form-item label="工作内容">
           {{config.workNature[designatedWorker.taff_work_nature]}}
         </el-form-item>
-        <el-form-item label="用户账号">
+        <el-form-item label="人员">
           <el-select  v-model="designatedWorker.supplier_id"  filterable placeholder="请选择" style="width: 100%">
             <el-option v-for="item in supplierList" :key="item.id" :label="item.number+'('+item.name+')'" :value="item.id"></el-option>
           </el-select>
@@ -614,14 +630,14 @@
           }
         })
 
-        // $_get('/Views/admin/business/getAssignsTaff.aspx?workID=' + _this.workId).then(function (response) {
-        //   if (response.code == 1) {
-        //     let da = response.data;
-        //     _this.assignsTaff=da;
-        //   } else {
-        //     _this.$message.error(response.msg);
-        //   }
-        // })
+        $_get('/Views/admin/business/getAssignsTaff.aspx?workID=' + _this.workId).then(function (response) {
+          if (response.code == 1) {
+            let da = response.data;
+            _this.assignsTaff=da;
+          } else {
+            _this.$message.error(response.msg);
+          }
+        })
       },
       submitFormDesignated() {
         let _this=this;
@@ -633,8 +649,13 @@
         let saveData={
           data:JSON.stringify(_this.designatedWorker)
         }
+        let url='/Views/admin/addTable.aspx?T=work_assigns_taff';
+        if(this.tId>0){
+          url='/Views/admin/updateTable.aspx?T=work_assigns_taff';
+          saveData.id=this.tId;
+        }
         console.log(saveData)
-        $_post("/Views/admin/addTable.aspx?T=work_assigns_taff",saveData).then(function (response) {
+        $_post(url,saveData).then(function (response) {
           if(response.code==1){
             _this.$message.success('操作成功');
             _this.getDesignated();
@@ -653,6 +674,7 @@
         this.$router.push({path:"/bonus",query:{workId:this.workId}});
       },
       designatedWorkerAdd(type){
+        this.tId = -1;
         this.designatedVisible=true;
         this.designatedWorker.taff_work_nature=type;
         this.designatedWorker.taff_remarks='';
@@ -702,6 +724,15 @@
           }
         })
       },
+      editAssignsTaff(index, row){
+        let _this=this;
+        this.tId = row.id;
+        _this.designatedVisible=true;
+        this.designatedWorker.taff_work_nature=row.taff_work_nature;
+        this.designatedWorker.taff_remarks=row.taff_remarks;
+        this.designatedWorker.supplier_id=row.supplier_id;
+      },
+
       setState(state){
         let _this=this;
         let save2={
