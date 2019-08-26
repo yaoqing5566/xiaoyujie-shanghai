@@ -203,7 +203,7 @@
           _this.$message.error(response.msg);
         }
       })
-      $_get('/Views/admin/business/readWorkSimple.aspx?pageIndex=1&pageSize=60').then(function (response) {
+      $_get('/Views/admin/business/readWorkSimple.aspx?pageIndex=1&pageSize=2000').then(function (response) {
         if(response.code==1){
           _this.workList=response.data.list;
         }else {

@@ -29,11 +29,13 @@
         </el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <el-select v-if="$store.state.userInfo.type==1" v-model="scope.row.rs_state" @change="onSelectedDrug($event, scope.row)"
-                       placeholder="状态" class="handle-select mr10" style="width: 100%">
-              <el-option v-for="(item,index) in config.reimbursement.state" :label="item" :key="index" :value="index"></el-option>
-            </el-select>
-            <span v-else>{{config.reimbursement.state[scope.row.rs_state]}}</span>
+            <div  :class="'new-state'+scope.row.rs_state">
+              <el-select v-if="$store.state.userInfo.type==1" v-model="scope.row.rs_state" @change="onSelectedDrug($event, scope.row)"
+                         placeholder="状态" class="handle-select mr10" style="width: 100%">
+                <el-option :class="'label-new-state'+index" v-for="(item,index) in config.reimbursement.state" :label="item" :key="index" :value="index"></el-option>
+              </el-select>
+              <span v-else>{{config.reimbursement.state[scope.row.rs_state]}}</span>
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="rs_cost"  label="费用" align="right"></el-table-column>
@@ -61,9 +63,14 @@
     <!-- 编辑弹出框 -->
     <el-dialog :close-on-click-modal="false" :title="dialogName" :visible.sync="editVisible" width="350px">
       <el-form ref="form" :model="form" label-width="80px" :rules="rules">
-        <el-form-item label="工作编号" prop="work_number">
+        <el-form-item label="工作编号" prop="work_number_id">
           <el-select v-model="form.work_number_id" filterable placeholder="请输入编号" style="width: 100%">
             <el-option v-for="item in workList" :key="item.id" :label="item.work_number+'  '+item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="人员" prop="supplier_id">
+          <el-select v-model="form.supplier_id" filterable placeholder="人员"  style="width: 100%">
+            <el-option v-for="item in supplierList" :key="item.id" :label="item.number+'('+item.name+')'" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="费用" prop="rs_cost">
@@ -101,6 +108,7 @@
       return {
         dialogName:'添加',
         tableData: [],
+        supplierList:[],
         pageIndex:1,
         pageSize:10,
         count:0,
@@ -113,12 +121,16 @@
           rs_cost:'',
           rs_type:'',
           rs_remarks:'',
-          user_id:''
+          user_id:'',
+          supplier_id:''
         },
         workList:[],
         rules: {
           work_number_id: [
             { required: true, message: '请输入工作编号', trigger: 'blur' }
+          ],
+          supplier_id: [
+            { required: true, message: '请选择人员', trigger: 'blur' }
           ],
           rs_cost: [
             { required: true, message: '请输入费用', trigger: 'blur' }
@@ -133,8 +145,17 @@
       }
     },
     created() {
+      let _this=this;
       this.getData();
       this.getWork();
+      //获取供应方列表
+      $_get('/Views/admin/info/readSupplier.aspx?pageIndex=1&pageSize=1000&number=&name=').then(function (response) {
+        if(response.code==1){
+          _this.supplierList=response.data.list;
+        }else {
+          _this.$message.error(response.msg);
+        }
+      })
     },
     watch: {
       '$route' (to, from) {
@@ -229,6 +250,7 @@
           rs_cost:'',
           rs_type:'',
           rs_remarks:'',
+          supplier_id:''
         }
         if(type=='edit'){
           this.dialogName='修改';
@@ -246,7 +268,7 @@
       },
       getWork(){
         let _this=this;
-        $_get('/Views/admin/business/readWorkSimple.aspx?pageIndex=1&pageSize=60').then(function (response) {
+        $_get('/Views/admin/business/readWorkSimple.aspx?pageIndex=1&pageSize=2000').then(function (response) {
           if(response.code==1){
             _this.workList=response.data.list;
           }else {
@@ -272,7 +294,7 @@
 
 </script>
 
-<style scoped>
+<style >
   .handle-box {
     margin-bottom: 20px;
   }
@@ -297,6 +319,12 @@
   .del-dialog-cnt{
     font-size: 16px;
     text-align: center
+  }
+  .new-state1 .el-input__inner{
+    color: #f791a3;
+  }
+  .new-state2 .el-input__inner{
+    color: red;
   }
 </style>
 
