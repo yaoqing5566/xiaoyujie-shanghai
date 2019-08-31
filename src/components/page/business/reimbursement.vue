@@ -19,7 +19,7 @@
         <el-table-column prop="rs_number"  label="编号"></el-table-column>
         <el-table-column label="关联工作单">
           <template slot-scope="scope">
-            {{scope.row.work_number+scope.row.work_name}}
+            {{scope.row.work_number?(scope.row.work_number+scope.row.work_name):'其他'}}
           </template>
         </el-table-column>
         <el-table-column label="类型">
@@ -65,6 +65,7 @@
       <el-form ref="form" :model="form" label-width="80px" :rules="rules">
         <el-form-item label="工作编号" prop="work_number_id">
           <el-select v-model="form.work_number_id" filterable placeholder="请输入编号" style="width: 100%">
+            <el-option key="0" label="SH00000000000  其他" value="0"></el-option>
             <el-option v-for="item in workList" :key="item.id" :label="item.work_number+'  '+item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
