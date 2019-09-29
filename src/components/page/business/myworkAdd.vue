@@ -71,7 +71,7 @@
             <el-radio-group v-model="saveData.business_nature.other" @change="changeHandler(saveData.business_nature.other,'other')">
               <el-radio v-for="(other,index) in config.business.other" :label="index" :key="index">{{other}}</el-radio>
             </el-radio-group>
-            <div class="my-ywxz">个人</div>
+            <div class="my-ywxz">个人/团体</div>
             <el-radio-group v-model="saveData.business_nature.personal" @change="changeHandler(saveData.business_nature.personal,'personal')">
               <el-radio v-for="(personal,index) in config.business.personal" :label="index" :key="index">{{personal}}</el-radio>
             </el-radio-group>

@@ -9,7 +9,7 @@ var CONFIG={
   //我的工作单状态
   myWorkState:['录入','作业','结案','作废待审','作废'],
   //业务性质-录入工作单
-  businessEnum:{'ad':'广告','game':'游戏','mv':'影视剧/舞台剧','record':'唱片','scene':'现场','authorize':'播放授权','copyright':'版权交易','personal':'个人','other':'其他'},
+  businessEnum:{'ad':'广告','game':'游戏','mv':'影视剧/舞台剧','record':'唱片','scene':'现场','authorize':'播放授权','copyright':'版权交易','personal':'个人/团体','other':'其他'},
   business:{
     ad:['TVC','资料片','电台广告','企业歌曲','微电影','网络广告','微信','彩铃','手机APP','其他广告','电影广告','MV'],//广告
     game:['网络游戏','单机游戏','手机游戏'],//游戏
