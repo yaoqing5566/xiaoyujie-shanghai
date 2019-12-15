@@ -225,14 +225,14 @@
         form: {
           supplier_id:'',
           wages_date:'',
-          wages_yfgz:'', //应发工资
-          wages_dwjnjs:'', //单位缴纳基数
-          wages_yl:'', //养老
-          wages_yb:'', //医保
-          wages_sybx:'', //失业保险
-          wages_hj:'', //合计
-          wages_dkgjj:'', //代扣公积金
-          wages_sfxz:'', //实发薪资
+          wages_yfgz:'5000', //应发工资
+          wages_dwjnjs:'5000', //单位缴纳基数
+          wages_yl:'400', //养老
+          wages_yb:'100', //医保
+          wages_sybx:'25', //失业保险
+          wages_hj:'525', //合计
+          wages_dkgjj:'250', //代扣公积金
+          wages_sfxz:'4225', //实发薪资
           wages_dxbc:'', //底薪补差
           wages_ctft:'', //车贴饭贴
           wages_lytc:'', //录音提成
@@ -293,7 +293,15 @@
         this.form.wages_jjhj+=this.form.wages_xqtc?parseFloat(this.form.wages_xqtc):0;
         this.form.wages_jjhj+=this.form.wages_gsyc?parseFloat(this.form.wages_gsyc):0;
         this.form.wages_jjhj+=this.form.wages_grbjfh?parseFloat(this.form.wages_grbjfh):0;
+
+        this.form.wages_hj=0;//合计保险部分
+        this.form.wages_hj+=this.form.wages_yl?parseFloat(this.form.wages_yl):0;
+        this.form.wages_hj+=this.form.wages_yb?parseFloat(this.form.wages_yb):0;
+        this.form.wages_hj+=this.form.wages_sybx?parseFloat(this.form.wages_sybx):0;
+        this.form.wages_sfxz=this.form.wages_yfgz-this.form.wages_hj-(this.form.wages_dkgjj?parseFloat(this.form.wages_dkgjj):0);//合计实发薪资
       },
+
+
       handleSelect(id) {
        this.changeDateAndSupplier();
       },
@@ -388,9 +396,27 @@
         this.eidx = '';
         this.editVisible=true;
         this.dialogName='新增';
-        for(let key in this.form){
-          this.form[key]='';
-        }
+        this.form={
+          supplier_id:'',
+            wages_date:'',
+            wages_yfgz:'5000', //应发工资
+            wages_dwjnjs:'5000', //单位缴纳基数
+            wages_yl:'400', //养老
+            wages_yb:'100', //医保
+            wages_sybx:'25', //失业保险
+            wages_hj:'525', //合计
+            wages_dkgjj:'250', //代扣公积金
+            wages_sfxz:'4225', //实发薪资
+            wages_dxbc:'', //底薪补差
+            wages_ctft:'', //车贴饭贴
+            wages_lytc:'', //录音提成
+            wages_zqtc:'', //作曲提成
+            wages_yxyxtc:'', //游戏音效提成
+            wages_xqtc:'', //选曲提成
+            wages_gsyc:'', //歌手演唱
+            wages_grbjfh:'', //个人补缴返回
+            wages_jjhj:'', //奖金合计
+        };
         if(data!='add'){
           this.dialogName='修改';
           this.eidx = row;
