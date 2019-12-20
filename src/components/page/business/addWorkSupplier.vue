@@ -29,13 +29,13 @@
     <!-- 编辑弹出框 -->
     <el-dialog :close-on-click-modal="false" :title="dialogName" :visible.sync="editVisible" width="450px">
       <el-form ref="form" :model="form" label-width="80px" :rules="rules">
-        <el-form-item label="身份" prop="identity">
-          <el-input v-model="form.identity"></el-input>
-        </el-form-item>
         <el-form-item label="供应方" prop="work_id">
           <el-select v-model="form.supplier_id" filterable placeholder="请选择" style="width: 100%" @change="choseSupplier">
             <el-option v-for="item in supplierList" :key="item.id" :label="item.number+'('+item.name+')'" :value="item.id"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="身份" prop="identity">
+          <el-input v-model="form.identity"></el-input>
         </el-form-item>
         <el-form-item label="工作内容" prop="job_content">
           <el-input v-model="form.job_content"></el-input>
@@ -113,11 +113,13 @@
     methods: {
       choseSupplier(id){
         let item=this.getSupplierRow(id);
+        console.log(item)
         if(item){
           this.form.supplier_id=item.id;
           this.form.supplier_number=item.number;
           this.form.supplier_name=item.name;
           this.form.supplier_mobile=item.mobile;
+          this.form.identity=item.id_number
         }
 
       },

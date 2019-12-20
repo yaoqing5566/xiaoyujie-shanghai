@@ -36,7 +36,7 @@
         </el-table-column>
       </el-table>
       <div class="pagination">
-        <el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" layout="prev, pager, next" :total="count">
+        <el-pagination  :current-page="pageIndex" background @current-change="handleCurrentChange" :page-size="pageSize" layout="prev, pager, next" :total="count">
         </el-pagination>
       </div>
     </div>
@@ -82,6 +82,7 @@
     methods: {
       searchData(){
         console.log(this.select)
+         this.pageIndex=1;
         this.getData();
       },
       handleDelete(index, row) {

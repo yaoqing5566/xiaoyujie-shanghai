@@ -27,7 +27,7 @@
         </el-table-column>
       </el-table>
       <div class="pagination">
-        <el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" layout="prev, pager, next" :total="count">
+        <el-pagination background  :current-page="pageIndex" @current-change="handleCurrentChange" :page-size="pageSize" layout="prev, pager, next" :total="count">
         </el-pagination>
       </div>
     </div>
@@ -75,6 +75,7 @@
         return json.join();
       },
       searchData(){
+          this.pageIndex=1;
         console.log(this.select)
         this.getData();
       },
