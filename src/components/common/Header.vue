@@ -1,38 +1,40 @@
 <template>
-    <div class="header">
-        <!-- 折叠按钮 -->
-        <div class="collapse-btn" @click="collapseChage">
-            <i class="el-icon-menu"></i>
+  <div class="header">
+    <!-- 折叠按钮 -->
+    <div class="collapse-btn" @click="collapseChage">
+      <i class="el-icon-menu"></i>
+    </div>
+    <div class="logo">上海后台管理系统</div>
+    <div class="header-right">
+      <div class="header-user-con">
+        <!-- 全屏显示 -->
+        <div class="btn-fullscreen" @click="handleFullScreen">
+          <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
+            <i class="el-icon-rank"></i>
+          </el-tooltip>
         </div>
-        <div class="logo">上海后台管理系统</div>
-        <div class="header-right">
-            <div class="header-user-con">
-                <!-- 全屏显示 -->
-                <div class="btn-fullscreen" @click="handleFullScreen">
-                    <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
-                        <i class="el-icon-rank"></i>
-                    </el-tooltip>
-                </div>
 
-                <!-- 用户头像 -->
-                <div class="user-avator"><img src="../../../static/img/img.jpg"></div>
-                <!-- 用户名下拉菜单 -->
-                <el-dropdown class="user-name" trigger="click" @command="handleCommand">
+        <!-- 用户头像 -->
+        <div class="user-avator"><img src="../../../static/img/img.jpg"></div>
+        <!-- 用户名下拉菜单 -->
+        <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
                         {{username}} <i class="el-icon-caret-bottom"></i>
                     </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item divided v-if="$store.state.userInfo.type==1"  command="shanghai">上海后台管理系统</el-dropdown-item>
-                        <el-dropdown-item divided v-if="$store.state.userInfo.type==1"   command="beijing">北京后台管理系统</el-dropdown-item>
-                        <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-            </div>
-        </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item divided v-if="$store.state.userInfo.type==1" command="shanghai">上海后台管理系统</el-dropdown-item>
+            <el-dropdown-item divided v-if="$store.state.userInfo.type==1" command="beijing">北京后台管理系统</el-dropdown-item>
+            <el-dropdown-item divided v-if="$store.state.userInfo.type==1" command="zj">嘉秝·音悦 业务管理系统</el-dropdown-item>
+            <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
+  </div>
 </template>
 <script>
     import bus from '../common/bus';
+
     export default {
         data() {
             return {
@@ -42,13 +44,13 @@
                 message: 2
             }
         },
-        computed:{
-            username(){
+        computed: {
+            username() {
                 let username = JSON.parse(localStorage.getItem('ms_user')).name;
                 return username ? username : this.name;
             }
         },
-        created(){
+        created() {
 
 //            let that=this;
 //            $(window).resize(function () {
@@ -59,39 +61,42 @@
 //              }
 //              bus.$emit('collapse', that.collapse);
 //            })
-          },
-        methods:{
+        },
+        methods: {
             // 用户名下拉菜单选择事件
             handleCommand(command) {
-                if(command == 'loginout'){
-                  let _this=this;
-                  $_get('/Views/signOut.aspx').then(function (response) {
-                    if(response.code==1){
-                      localStorage.removeItem('ms_user')
-                      _this.$router.push('/login');
-                    }else {
-                      _this.$message.error("退出失败");
-                    }
-                  })
+                if (command == 'loginout') {
+                    let _this = this;
+                    $_get('/Views/signOut.aspx').then(function (response) {
+                        if (response.code == 1) {
+                            localStorage.removeItem('ms_user')
+                            _this.$router.push('/login');
+                        } else {
+                            _this.$message.error("退出失败");
+                        }
+                    })
                 }
-              let us=localStorage.getItem('ms_user');
-              if(us){
-                us=JSON.parse(us);
-              }
-              if(command == 'shanghai'){
-                  window.location.href="http://106.14.180.122:68/administrator/#/login?n="+us.name+"&p="+us.token;
-              }
-              if(command == 'beijing'){
-                window.location.href="http://47.101.54.147:68/administrator/#/login?n="+us.name+"&p="+us.token;
-              }
+                let us = localStorage.getItem('ms_user');
+                if (us) {
+                    us = JSON.parse(us);
+                }
+                if (command == 'shanghai') {
+                    window.location.href =CONFIG.login.shanghai+ "/administrator/#/login?n=" + us.name + "&p=" + us.token;
+                }
+                if (command == 'beijing') {
+                    window.location.href =CONFIG.login.beijing+ "/administrator/#/login?n=" + us.name + "&p=" + us.token;
+                }
+                if (command == 'zj') {
+                    window.location.href = CONFIG.login.zj+ "/administrator/#/login?n=" + us.name + "&p=" + us.token;
+                }
             },
             // 侧边栏折叠
-            collapseChage(){
+            collapseChage() {
                 this.collapse = !this.collapse;
                 bus.$emit('collapse', this.collapse);
             },
             // 全屏事件
-            handleFullScreen(){
+            handleFullScreen() {
                 let element = document.documentElement;
                 if (this.fullscreen) {
                     if (document.exitFullscreen) {
@@ -121,79 +126,91 @@
     }
 </script>
 <style scoped>
-    .header {
-        position: relative;
-        box-sizing: border-box;
-        width: 100%;
-        height: 70px;
-        font-size: 22px;
-        color: #fff;
-        background-color: #f4a2b0;
-    }
+  .header {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 70px;
+    font-size: 22px;
+    color: #fff;
+    background-color: #f4a2b0;
+  }
 
-    .collapse-btn{
-        float: left;
-        padding: 0 21px;
-        cursor: pointer;
-        line-height: 70px;
-    }
-    .header .logo{
-        float: left;
-        width:250px;
-        line-height: 70px;
-    }
-    .header-right{
-        float: right;
-        padding-right: 50px;
-    }
-    .header-user-con{
-        display: flex;
-        height: 70px;
-        align-items: center;
-    }
-    .btn-fullscreen{
-        transform: rotate(45deg);
-        margin-right: 5px;
-        font-size: 24px;
-    }
-    .btn-bell, .btn-fullscreen{
-        position: relative;
-        width: 30px;
-        height: 30px;
-        text-align: center;
-        border-radius: 15px;
-        cursor: pointer;
-    }
-    .btn-bell-badge{
-        position: absolute;
-        right: 0;
-        top: -2px;
-        width: 8px;
-        height: 8px;
-        border-radius: 4px;
-        background: #f56c6c;
-        color: #fff;
-    }
-    .btn-bell .el-icon-bell{
-        color: #fff;
-    }
-    .user-name{
-        margin-left: 10px;
-    }
-    .user-avator{
-        margin-left: 20px;
-    }
-    .user-avator img{
-        display: block;
-        width:40px;
-        height:40px;
-        border-radius: 50%;
-    }
-    .el-dropdown-link{
-        color: #fff;
-        cursor: pointer;
-    }
-    .el-dropdown-menu__item{
-        text-align: center;
-    }
+  .collapse-btn {
+    float: left;
+    padding: 0 21px;
+    cursor: pointer;
+    line-height: 70px;
+  }
+
+  .header .logo {
+    float: left;
+    width: 250px;
+    line-height: 70px;
+  }
+
+  .header-right {
+    float: right;
+    padding-right: 50px;
+  }
+
+  .header-user-con {
+    display: flex;
+    height: 70px;
+    align-items: center;
+  }
+
+  .btn-fullscreen {
+    transform: rotate(45deg);
+    margin-right: 5px;
+    font-size: 24px;
+  }
+
+  .btn-bell, .btn-fullscreen {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+
+  .btn-bell-badge {
+    position: absolute;
+    right: 0;
+    top: -2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: #f56c6c;
+    color: #fff;
+  }
+
+  .btn-bell .el-icon-bell {
+    color: #fff;
+  }
+
+  .user-name {
+    margin-left: 10px;
+  }
+
+  .user-avator {
+    margin-left: 20px;
+  }
+
+  .user-avator img {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .el-dropdown-link {
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .el-dropdown-menu__item {
+    text-align: center;
+  }
 </style>

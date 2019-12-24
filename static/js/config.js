@@ -45,5 +45,10 @@ var CONFIG={
     state:["申请","以审","已发放"],
     cause:["工作","加班","出差","探亲","其他"]
   },
-  wagesType:['录音提成','作曲提成','游戏音效提成','选曲提成','歌手演唱']
+  wagesType:['录音提成','作曲提成','游戏音效提成','选曲提成','歌手演唱'],
+  login:{
+    'shanghai':'http://sh.iedtech.cn',
+    'beijing':'http://bj.iedtech.cn',
+    'zj':'http://zj.iedtech.cn'
+  }
 }
